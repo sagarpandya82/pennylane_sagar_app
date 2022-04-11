@@ -5,3 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+recipes = File.open('./lib/assets/recipes-en.json')
+data = JSON.load(recipes)
+data.each {|recipe| Recipe.create(title: recipe['title'], ingredients: recipe['ingredients']) }

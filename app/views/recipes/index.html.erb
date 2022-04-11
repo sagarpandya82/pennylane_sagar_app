@@ -2,6 +2,27 @@
 
 <h1>Recipes</h1>
 
+<% if current_user %>
+  <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+<br>
+<%= search_form_for @q, url: search_recipes_path, html: { method: :post } do |f| %>
+  <%= f.condition_fields do |c| %>
+    <div class="field">
+
+      <%= c.attribute_fields do |a| %>
+        <%= a.attribute_select %>
+      <% end %>
+
+      <%= c.predicate_select only: [:cont], compounds: false %>
+      <%= c.value_fields do |v| %>
+        <%= v.text_field :value %>
+      <% end %>
+
+    </div>
+    <% end %>
+  <div class='actions'><%= f.submit 'Search' %></div>
+<% end %>
+
 <table>
   <thead>
     <tr>
@@ -12,9 +33,10 @@
   <tbody>
     <% @recipes.each do |recipe| %>
       <tr>
+        <td><%= recipe.title %></td>
         <td><%= link_to 'Show', recipe %></td>
-        <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-        <td><%= link_to 'Destroy', recipe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><% link_to 'Edit', edit_recipe_path(recipe) %></td>
+        <td><% link_to 'Destroy', recipe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -22,4 +44,9 @@
 
 <br>
 
-<%= link_to 'New Recipe', new_recipe_path %>
+<% link_to 'New Recipe', new_recipe_path %>
+
+<% else %>
+  <%= link_to 'Sign In', new_user_session_path %>
+  <%= link_to 'Sign Up', new_user_registration_path %>
+<% end %>

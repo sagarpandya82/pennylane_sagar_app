@@ -3,9 +3,15 @@ class RecipesController < ApplicationController
 
   # GET /recipes or /recipes.json
   def index
-    @recipes = Recipe.all
+    @q = Recipe.ransack(params[:q])
+    @recipes = @q.result(distinct: true)
+    @q.build_condition
   end
 
+  def search
+    index
+    render :index
+  end
   # GET /recipes/1 or /recipes/1.json
   def show
   end
